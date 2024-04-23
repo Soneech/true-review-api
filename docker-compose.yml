@@ -1,0 +1,53 @@
+services:
+  postgresql-tr:
+    container_name: postgresql-tr
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: true_review
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgresql-tr:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  liquibase-migrations-tr:
+    container_name: liquibase-migrations-tr
+    image: liquibase/liquibase:4.25
+    depends_on:
+      - postgresql-tr
+    command:
+      - --changelog-file=master.yml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://postgresql-tr:5432/true_review
+      - --username=postgres
+      - --password=postgres
+      - update
+    volumes:
+      - ./migrations:/liquibase/changelog
+    networks:
+      - backend
+
+  true-review-app:
+    container_name: true-review-app
+    build:
+      context: .
+      dockerfile: true-review.Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - liquibase-migrations-tr
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql-tr:5432/true_review
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    networks:
+      - backend
+
+volumes:
+  postgresql-tr: { }
+
+networks:
+  backend: { }
