@@ -36,7 +36,7 @@ public class User {
     @EqualsAndHashCode.Exclude
     private List<Review> reviews;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",
         joinColumns = @JoinColumn(name = "user_id"),

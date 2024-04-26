@@ -34,6 +34,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(request -> request
                     .requestMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                    .requestMatchers("/users").hasRole("ADMIN")
                     .anyRequest().hasAnyRole("USER", "ADMIN"))
             .formLogin(login -> login
                     .loginPage("/auth/login")
@@ -62,21 +63,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
-//    @Bean
-//    UrlBasedCorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.setAllowedOrigins(List.of("http://localhost:5174", "http://localhost:5173"));
-//
-//        configuration.setAllowedMethods(List.of(
-//                HttpMethod.GET.name(), HttpMethod.POST.name(),
-//                HttpMethod.PUT.name(), HttpMethod.PATCH.name(), HttpMethod.DELETE.name())
-//        );
-//        configuration.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 }

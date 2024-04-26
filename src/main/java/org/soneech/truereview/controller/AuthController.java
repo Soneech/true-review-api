@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.soneech.truereview.dto.request.AuthenticationRequest;
 import org.soneech.truereview.dto.request.RegistrationRequest;
-import org.soneech.truereview.dto.response.UserInfoResponse;
+import org.soneech.truereview.dto.response.user.RegisteredUserResponse;
 import org.soneech.truereview.exception.AuthException;
 import org.soneech.truereview.exception.RegistrationException;
 import org.soneech.truereview.mapper.DefaultModelMapper;
@@ -46,8 +46,8 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/registration")
-    public ResponseEntity<UserInfoResponse> register(@RequestBody @Valid RegistrationRequest request,
-                                                     BindingResult bindingResult) {
+    public ResponseEntity<RegisteredUserResponse> register(@RequestBody @Valid RegistrationRequest request,
+                                                           BindingResult bindingResult) {
         User user = mapper.convertToUser(request);
         userValidator.validate(user, bindingResult);
 
@@ -57,7 +57,7 @@ public class AuthController {
         }
 
         User savedUser = userService.register(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.convertToUserInfoResponse(savedUser));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.convertToRegisteredUserResponse(savedUser));
     }
 
     @PostMapping("/login")

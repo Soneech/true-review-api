@@ -1,4 +1,4 @@
-package org.soneech.truereview.dto.response;
+package org.soneech.truereview.dto.response.errors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;

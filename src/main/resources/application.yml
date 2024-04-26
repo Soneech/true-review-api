@@ -4,6 +4,9 @@ app:
     subject: true-review-api
     issuer: Soneech
     ttl: 3600
+  roles:
+    admin: ROLE_ADMIN
+    user: ROLE_USER
 
 spring:
   application:
