@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,7 @@ public class UserService {
 
     public User findById(long id) {
         Optional<User> foundUser = userRepository.findById(id);
-        return foundUser.orElseThrow(() -> new UserNotFoundException("Такой пользователь не найден", id));
+        return foundUser.orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Transactional
@@ -44,5 +43,11 @@ public class UserService {
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
+    }
+
+    public void verifyThatUserExists(long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException(userId);
+        }
     }
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AuthenticatedUserResponse {
+
     @NotNull
     private UserShortInfoResponse user;
 

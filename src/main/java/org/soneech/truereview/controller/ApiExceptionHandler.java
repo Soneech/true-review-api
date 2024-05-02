@@ -1,10 +1,8 @@
 package org.soneech.truereview.controller;
 
 import org.soneech.truereview.dto.response.errors.BadCredentialsResponse;
-import org.soneech.truereview.dto.response.errors.UserNotFoundResponse;
-import org.soneech.truereview.exception.AuthException;
-import org.soneech.truereview.exception.RegistrationException;
-import org.soneech.truereview.exception.UserNotFoundException;
+import org.soneech.truereview.dto.response.errors.NotFoundResponse;
+import org.soneech.truereview.exception.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,11 +30,10 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<UserNotFoundResponse> handleUserNotFoundException(UserNotFoundException exception) {
+    public ResponseEntity<NotFoundResponse> handleNotFoundException(NotFoundException exception) {
         return ResponseEntity
                 .status(exception.getHttpStatus())
-                .body(new UserNotFoundResponse(
-                        exception.getHttpStatus().toString(),
-                        exception.getMessage(), exception.getUserId()));
+                .body(new NotFoundResponse(exception.getHttpStatus().toString(),
+                        exception.getMessage(), exception.getId()));
     }
 }

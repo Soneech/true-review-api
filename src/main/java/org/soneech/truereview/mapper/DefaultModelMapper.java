@@ -3,8 +3,13 @@ package org.soneech.truereview.mapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.soneech.truereview.dto.request.RegistrationRequest;
+import org.soneech.truereview.dto.response.review.CategoryResponse;
+import org.soneech.truereview.dto.response.review.ReviewFullInfoResponse;
+import org.soneech.truereview.dto.response.review.ReviewShortResponse;
 import org.soneech.truereview.dto.response.role.RoleResponse;
 import org.soneech.truereview.dto.response.user.*;
+import org.soneech.truereview.model.Category;
+import org.soneech.truereview.model.Review;
 import org.soneech.truereview.model.Role;
 import org.soneech.truereview.model.User;
 import org.springframework.stereotype.Service;
@@ -63,5 +68,24 @@ public class DefaultModelMapper {
     public AuthenticatedUserResponse convertToAuthenticatedUserResponse(User user, String token) {
         UserShortInfoResponse shortInfoResponse = convertToUserShortInfoResponse(user);
         return new AuthenticatedUserResponse(shortInfoResponse, token);
+    }
+
+    public List<ReviewShortResponse> convertToListWithReviewShortResponse(List<Review> reviews) {
+        return reviews.stream().map(review -> modelMapper.map(review, ReviewShortResponse.class)).toList();
+    }
+
+    public CategoryResponse convertToCategoryResponse(Category category) {
+        return modelMapper.map(category, CategoryResponse.class);
+    }
+
+    public List<CategoryResponse> convertToListWithCategoryResponse(List<Category> categories) {
+        return categories.stream().map(category -> modelMapper.map(category, CategoryResponse.class)).toList();
+    }
+
+    public ReviewFullInfoResponse convertToReviewFullInfoResponse(Review review) {
+        ReviewFullInfoResponse reviewResponse = modelMapper.map(review, ReviewFullInfoResponse.class);
+        reviewResponse.setCategory(convertToCategoryResponse(review.getCategory()));
+
+        return reviewResponse;
     }
 }

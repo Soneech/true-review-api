@@ -6,11 +6,11 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.soneech.truereview.dto.response.role.RoleResponse;
-
 import java.util.List;
 
 @Data
 public class UserFullInfoResponse implements UserInfoResponse {
+
     @NotNull
     private Long id;
 
