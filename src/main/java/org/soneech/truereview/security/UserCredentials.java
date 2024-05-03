@@ -1,6 +1,7 @@
 package org.soneech.truereview.security;
 
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.soneech.truereview.model.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 @RequiredArgsConstructor
+@Getter
 public class UserCredentials implements UserDetails {
 
     private final User user;

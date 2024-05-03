@@ -13,7 +13,6 @@ import org.soneech.truereview.model.Review;
 import org.soneech.truereview.model.Role;
 import org.soneech.truereview.model.User;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -71,7 +70,14 @@ public class DefaultModelMapper {
     }
 
     public List<ReviewShortResponse> convertToListWithReviewShortResponse(List<Review> reviews) {
-        return reviews.stream().map(review -> modelMapper.map(review, ReviewShortResponse.class)).toList();
+        return reviews.stream().map(this::convertToReviewShortResponse).toList();
+    }
+
+    public ReviewShortResponse convertToReviewShortResponse(Review review) {
+        ReviewShortResponse reviewResponse = modelMapper.map(review, ReviewShortResponse.class);
+        reviewResponse.setAuthor(convertToUserShortInfoResponse(review.getAuthor()));
+
+        return reviewResponse;
     }
 
     public CategoryResponse convertToCategoryResponse(Category category) {
@@ -85,6 +91,7 @@ public class DefaultModelMapper {
     public ReviewFullInfoResponse convertToReviewFullInfoResponse(Review review) {
         ReviewFullInfoResponse reviewResponse = modelMapper.map(review, ReviewFullInfoResponse.class);
         reviewResponse.setCategory(convertToCategoryResponse(review.getCategory()));
+        reviewResponse.setAuthor(convertToUserShortInfoResponse(review.getAuthor()));
 
         return reviewResponse;
     }

@@ -21,4 +21,8 @@ public class CategoryService {
     public Category getCategoryById(long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
     }
+
+    public boolean existsById(long id) {
+        return categoryRepository.existsById(id);
+    }
 }

@@ -3,6 +3,7 @@ package org.soneech.truereview.dto.response.review;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.soneech.truereview.dto.response.user.UserShortInfoResponse;
 import org.soneech.truereview.model.Image;
 import java.util.List;
 
@@ -29,4 +30,7 @@ public class ReviewFullInfoResponse {
     private CategoryResponse category;
 
     private List<Image> images;
+
+    @NotNull
+    private UserShortInfoResponse author;
 }

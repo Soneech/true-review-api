@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.soneech.truereview.dto.response.user.UserShortInfoResponse;
 
 @Data
 public class ReviewShortResponse {
@@ -17,4 +18,7 @@ public class ReviewShortResponse {
 
     @NotNull
     private Short rating;
+
+    @NotNull
+    private UserShortInfoResponse author;
 }

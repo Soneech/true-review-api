@@ -5,6 +5,7 @@ import org.soneech.truereview.security.JwtFilter;
 import org.soneech.truereview.security.service.UserCredentialsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -37,8 +38,9 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(request -> request
-                    .requestMatchers("/auth/login", "/auth/registration",
-                            "/categories/**", "/reviews/**","/error").permitAll()
+                    .requestMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/reviews", "/reviews/**", "/users/**",
+                            "/categories","/categories/**").permitAll()
                     .requestMatchers("/users").hasRole("ADMIN")
                     .anyRequest().hasAnyRole("USER", "ADMIN"))
             .formLogin(login -> login
