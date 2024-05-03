@@ -1,6 +1,6 @@
 package org.soneech.truereview.controller;
 
-import org.soneech.truereview.dto.response.errors.BadCredentialsResponse;
+import org.soneech.truereview.dto.response.errors.BadParamsResponse;
 import org.soneech.truereview.dto.response.errors.BadRequestResponse;
 import org.soneech.truereview.dto.response.errors.NotFoundResponse;
 import org.soneech.truereview.exception.*;
@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ApiExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<BadCredentialsResponse> handleAuthException(AuthException exception) {
+    public ResponseEntity<BadParamsResponse> handleAuthException(AuthException exception) {
         return ResponseEntity
                 .status(exception.getHttpStatus())
-                .body(new BadCredentialsResponse(
+                .body(new BadParamsResponse(
                         exception.getHttpStatus().toString(), exception.getMessage(),
                         exception.getCredentialsErrors()
                 ));
     }
 
     @ExceptionHandler
-    public ResponseEntity<BadCredentialsResponse> handleRegistrationException(RegistrationException exception) {
+    public ResponseEntity<BadParamsResponse> handleRegistrationException(RegistrationException exception) {
         return ResponseEntity
                 .status(exception.getHttpStatus())
-                .body(new BadCredentialsResponse(
+                .body(new BadParamsResponse(
                         exception.getHttpStatus().toString(), exception.getMessage(),
                         exception.getCredentialsErrors()));
     }
@@ -43,5 +43,13 @@ public class ApiExceptionHandler {
         return ResponseEntity
                 .status(exception.getHttpStatus())
                 .body(new BadRequestResponse(exception.getHttpStatus().toString(), exception.getMessage()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<BadParamsResponse> handleUpdateCategoryException(UpdateCategoryException exception) {
+        return ResponseEntity
+                .status(exception.getHttpStatus())
+                .body(new BadParamsResponse(exception.getHttpStatus().toString(),
+                        exception.getMessage(), exception.getFieldsErrors()));
     }
 }

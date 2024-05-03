@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.Map;
 import java.util.Set;
 
-public record BadCredentialsResponse(
+public record BadParamsResponse(
     @NotBlank
     String code,
 

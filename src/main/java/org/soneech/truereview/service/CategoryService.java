@@ -5,7 +5,6 @@ import org.soneech.truereview.exception.CategoryNotFoundException;
 import org.soneech.truereview.model.Category;
 import org.soneech.truereview.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -24,5 +23,12 @@ public class CategoryService {
 
     public boolean existsById(long id) {
         return categoryRepository.existsById(id);
+    }
+
+    public Category updateCategory(Category category) {
+        if (!existsById(category.getId())) {
+            throw new CategoryNotFoundException(category.getId());
+        }
+        return categoryRepository.save(category);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.soneech.truereview.dto.request.CreateReviewRequest;
 import org.soneech.truereview.dto.request.RegistrationRequest;
+import org.soneech.truereview.dto.request.UpdateCategoryRequest;
 import org.soneech.truereview.dto.response.review.CategoryResponse;
 import org.soneech.truereview.dto.response.review.ReviewFullInfoResponse;
 import org.soneech.truereview.dto.response.review.ReviewShortResponse;
@@ -99,5 +100,11 @@ public class DefaultModelMapper {
 
     public Review convertToReview(CreateReviewRequest request) {
         return modelMapper.map(request, Review.class);
+    }
+
+    public Category convertToCategory(UpdateCategoryRequest request, long id) {
+        Category category = modelMapper.map(request, Category.class);
+        category.setId(id);
+        return category;
     }
 }
