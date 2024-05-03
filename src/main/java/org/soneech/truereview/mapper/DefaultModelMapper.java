@@ -2,6 +2,7 @@ package org.soneech.truereview.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.soneech.truereview.dto.request.CreateReviewRequest;
 import org.soneech.truereview.dto.request.RegistrationRequest;
 import org.soneech.truereview.dto.response.review.CategoryResponse;
 import org.soneech.truereview.dto.response.review.ReviewFullInfoResponse;
@@ -94,5 +95,9 @@ public class DefaultModelMapper {
         reviewResponse.setAuthor(convertToUserShortInfoResponse(review.getAuthor()));
 
         return reviewResponse;
+    }
+
+    public Review convertToReview(CreateReviewRequest request) {
+        return modelMapper.map(request, Review.class);
     }
 }

@@ -22,11 +22,11 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<CategoryResponse>> getAllCategories() {
-        return ResponseEntity.ok(mapper.convertToListWithCategoryResponse(categoryService.getAllCategories()));
+        return ResponseEntity.ok(mapper.convertToListWithCategoryResponse(categoryService.findAllCategories()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryResponse> getOneCategory(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(mapper.convertToCategoryResponse(categoryService.getCategoryById(id)));
+        return ResponseEntity.ok(mapper.convertToCategoryResponse(categoryService.findById(id)));
     }
 }

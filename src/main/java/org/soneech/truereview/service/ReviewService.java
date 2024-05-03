@@ -1,10 +1,8 @@
 package org.soneech.truereview.service;
 
 import lombok.RequiredArgsConstructor;
-import org.soneech.truereview.exception.BadRequestException;
-import org.soneech.truereview.exception.CategoryNotFoundException;
-import org.soneech.truereview.exception.ReviewNotFoundException;
-import org.soneech.truereview.exception.UserNotFoundException;
+import org.soneech.truereview.exception.*;
+import org.soneech.truereview.model.Category;
 import org.soneech.truereview.model.Review;
 import org.soneech.truereview.model.User;
 import org.soneech.truereview.repository.ReviewRepository;
@@ -52,6 +50,22 @@ public class ReviewService {
             throw new CategoryNotFoundException(categoryId);
         }
         return reviewRepository.findReviewsForCategory(categoryId);
+    }
+
+    public Review createReview(Review review, long categoryId) throws NotFoundException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserCredentials userCredentials = (UserCredentials) authentication.getPrincipal();
+
+        if (!userService.existsById(userCredentials.getUser().getId())) {
+            throw new UserNotFoundException(userCredentials.getUser().getId());
+        }
+
+        User user = userCredentials.getUser();
+        Category foundCategory = categoryService.findById(categoryId);
+
+        review.setAuthor(user);
+        review.setCategory(foundCategory);
+        return reviewRepository.save(review);
     }
 
     public void deleteUserReview(long reviewId) throws ReviewNotFoundException {

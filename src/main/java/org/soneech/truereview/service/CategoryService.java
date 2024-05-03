@@ -14,11 +14,11 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<Category> getAllCategories() {
+    public List<Category> findAllCategories() {
         return categoryRepository.findAll();
     }
 
-    public Category getCategoryById(long id) {
+    public Category findById(long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 

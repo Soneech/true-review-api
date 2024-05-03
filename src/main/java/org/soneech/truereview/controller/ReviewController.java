@@ -1,21 +1,20 @@
 package org.soneech.truereview.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.soneech.truereview.dto.request.CreateReviewRequest;
 import org.soneech.truereview.dto.response.review.ReviewFullInfoResponse;
 import org.soneech.truereview.dto.response.review.ReviewShortResponse;
 import org.soneech.truereview.dto.response.success.SuccessOperationResponse;
-import org.soneech.truereview.exception.BadRequestException;
-import org.soneech.truereview.exception.CategoryNotFoundException;
-import org.soneech.truereview.exception.ReviewNotFoundException;
-import org.soneech.truereview.exception.UserNotFoundException;
+import org.soneech.truereview.exception.*;
 import org.soneech.truereview.mapper.DefaultModelMapper;
+import org.soneech.truereview.model.Review;
 import org.soneech.truereview.service.ReviewService;
+import org.soneech.truereview.util.ErrorsUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
@@ -25,6 +24,8 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     private final DefaultModelMapper mapper;
+
+    private final ErrorsUtil errorsUtil;
 
     @GetMapping("/reviews")
     public ResponseEntity<List<ReviewShortResponse>> getAllReviews() {
@@ -56,5 +57,18 @@ public class ReviewController {
 
         reviewService.deleteUserReview(id);
         return ResponseEntity.ok(new SuccessOperationResponse(HttpStatus.OK.toString(), "Отзыв удалён"));
+    }
+
+    @PostMapping("/reviews")
+    public ResponseEntity<ReviewFullInfoResponse> createReview(@RequestBody @Valid CreateReviewRequest request,
+                                                               BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new CreateReviewException(HttpStatus.BAD_REQUEST,
+                    errorsUtil.getFieldsErrors(bindingResult), "Некорректные данные отзыва");
+        }
+
+        Review savedReview =
+                reviewService.createReview(mapper.convertToReview(request), request.categoryId());
+        return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(savedReview));
     }
 }

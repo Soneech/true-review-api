@@ -30,6 +30,10 @@ public class UserService {
         return foundUser.orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public boolean existsById(long id) {
+        return userRepository.existsById(id);
+    }
+
     @Transactional
     public User register(User user) {
         user.setRoles(Collections.singletonList(roleService.findRoleByName(userRole)));
