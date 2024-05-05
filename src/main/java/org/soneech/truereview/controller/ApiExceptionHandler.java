@@ -52,4 +52,12 @@ public class ApiExceptionHandler {
                 .body(new BadParamsResponse(exception.getHttpStatus().toString(),
                         exception.getMessage(), exception.getFieldsErrors()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<BadParamsResponse> handleCreateReviewException(CreateReviewException exception) {
+        return ResponseEntity
+                .status(exception.getHttpStatus())
+                .body(new BadParamsResponse(exception.getHttpStatus().toString(),
+                        exception.getMessage(), exception.getFieldsErrors()));
+    }
 }

@@ -54,7 +54,9 @@ public class DefaultModelMapper {
 
     public UserPublicInfoResponse convertToUserPublicInfoResponse(User user, int reviewsCount) {
         UserPublicInfoResponse userResponse = modelMapper.map(user, UserPublicInfoResponse.class);
+
         userResponse.setReviewsCount(reviewsCount);
+        userResponse.setRoles(convertToListWithRoleResponse(user.getRoles()));
 
         return userResponse;
     }
