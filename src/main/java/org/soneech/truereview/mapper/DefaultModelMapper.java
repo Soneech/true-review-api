@@ -81,6 +81,16 @@ public class DefaultModelMapper {
         ReviewShortResponse reviewResponse = modelMapper.map(review, ReviewShortResponse.class);
         reviewResponse.setAuthor(convertToUserShortInfoResponse(review.getAuthor()));
 
+        String description;
+        if (review.getAdvantages() != null && !review.getAdvantages().isBlank()) {
+            description = review.getAdvantages();
+        } else if (review.getDisadvantages() != null && !review.getDisadvantages().isBlank()) {
+            description = review.getDisadvantages();
+        } else {
+            description = review.getNote();
+        }
+
+        reviewResponse.setDescription(description);
         return reviewResponse;
     }
 

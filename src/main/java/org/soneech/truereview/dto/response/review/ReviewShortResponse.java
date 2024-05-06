@@ -19,6 +19,9 @@ public class ReviewShortResponse {
     @NotNull
     private Short rating;
 
+    @NotBlank
+    private String description;
+
     @NotNull
     private UserShortInfoResponse author;
 }
