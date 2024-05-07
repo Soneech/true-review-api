@@ -21,7 +21,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
 
 @Configuration
@@ -42,7 +41,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(request -> request
                     .requestMatchers("/auth/login", "/auth/registration", "/error").permitAll()
                     .requestMatchers(HttpMethod.GET, "/reviews", "/reviews/**",
-                            "/categories","/categories/**").permitAll()
+                            "/categories","/categories/**", "/items", "/items/**").permitAll()
                     .requestMatchers("/users").hasRole("ADMIN")
                     .anyRequest().hasAnyRole("USER", "ADMIN"))
             .formLogin(login -> login

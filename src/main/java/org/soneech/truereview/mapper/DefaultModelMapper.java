@@ -3,17 +3,16 @@ package org.soneech.truereview.mapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.soneech.truereview.dto.request.CreateReviewRequest;
+import org.soneech.truereview.dto.request.CreateReviewRequestWithNewItem;
 import org.soneech.truereview.dto.request.RegistrationRequest;
 import org.soneech.truereview.dto.request.UpdateCategoryRequest;
 import org.soneech.truereview.dto.response.review.CategoryResponse;
 import org.soneech.truereview.dto.response.review.ReviewFullInfoResponse;
+import org.soneech.truereview.dto.response.review.ReviewItemResponse;
 import org.soneech.truereview.dto.response.review.ReviewShortResponse;
 import org.soneech.truereview.dto.response.role.RoleResponse;
 import org.soneech.truereview.dto.response.user.*;
-import org.soneech.truereview.model.Category;
-import org.soneech.truereview.model.Review;
-import org.soneech.truereview.model.Role;
-import org.soneech.truereview.model.User;
+import org.soneech.truereview.model.*;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -80,6 +79,7 @@ public class DefaultModelMapper {
     public ReviewShortResponse convertToReviewShortResponse(Review review) {
         ReviewShortResponse reviewResponse = modelMapper.map(review, ReviewShortResponse.class);
         reviewResponse.setAuthor(convertToUserShortInfoResponse(review.getAuthor()));
+        reviewResponse.setReviewItem(convertToReviewItemResponse(review.getReviewItem()));
 
         String description;
         if (review.getAdvantages() != null && !review.getAdvantages().isBlank()) {
@@ -94,6 +94,14 @@ public class DefaultModelMapper {
         return reviewResponse;
     }
 
+    public ReviewItemResponse convertToReviewItemResponse(ReviewItem reviewItem) {
+        return modelMapper.map(reviewItem, ReviewItemResponse.class);
+    }
+
+    public List<ReviewItemResponse> convertToListWithReviewItemResponse(List<ReviewItem> reviewItems) {
+        return reviewItems.stream().map(this::convertToReviewItemResponse).toList();
+    }
+
     public CategoryResponse convertToCategoryResponse(Category category) {
         return modelMapper.map(category, CategoryResponse.class);
     }
@@ -106,11 +114,16 @@ public class DefaultModelMapper {
         ReviewFullInfoResponse reviewResponse = modelMapper.map(review, ReviewFullInfoResponse.class);
         reviewResponse.setCategory(convertToCategoryResponse(review.getCategory()));
         reviewResponse.setAuthor(convertToUserShortInfoResponse(review.getAuthor()));
+        reviewResponse.setReviewItem(convertToReviewItemResponse(review.getReviewItem()));
 
         return reviewResponse;
     }
 
     public Review convertToReview(CreateReviewRequest request) {
+        return modelMapper.map(request, Review.class);
+    }
+
+    public Review convertToReview(CreateReviewRequestWithNewItem request) {
         return modelMapper.map(request, Review.class);
     }
 

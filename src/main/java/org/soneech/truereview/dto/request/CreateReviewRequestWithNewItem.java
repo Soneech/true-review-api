@@ -3,11 +3,10 @@ package org.soneech.truereview.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 
-public record CreateReviewRequest(
-
-    @NotNull(message = "Не может быть пустым")
-    @JsonProperty("item_id")
-    Long itemId,
+public record CreateReviewRequestWithNewItem(
+    @NotBlank(message = "Не может быть пустым")
+    @JsonProperty("item_name")
+    String itemName,
 
     @NotNull(message = "Не может быть пустым")
     @Min(value = 1, message = "Значение должно находиться в диапазоне от 1 до 5")

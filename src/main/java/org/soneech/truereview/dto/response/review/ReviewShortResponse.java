@@ -12,9 +12,9 @@ public class ReviewShortResponse {
     @NotNull
     private Long id;
 
-    @NotBlank
-    @JsonProperty("object_name")
-    private String objectName;
+    @NotNull
+    @JsonProperty("review_item")
+    private ReviewItemResponse reviewItem;
 
     @NotNull
     private Short rating;

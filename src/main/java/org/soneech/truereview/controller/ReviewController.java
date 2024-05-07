@@ -3,6 +3,7 @@ package org.soneech.truereview.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.soneech.truereview.dto.request.CreateReviewRequest;
+import org.soneech.truereview.dto.request.CreateReviewRequestWithNewItem;
 import org.soneech.truereview.dto.response.review.ReviewFullInfoResponse;
 import org.soneech.truereview.dto.response.review.ReviewShortResponse;
 import org.soneech.truereview.dto.response.success.SuccessOperationResponse;
@@ -11,6 +12,7 @@ import org.soneech.truereview.mapper.DefaultModelMapper;
 import org.soneech.truereview.model.Review;
 import org.soneech.truereview.service.ReviewService;
 import org.soneech.truereview.util.ErrorsUtil;
+import org.soneech.truereview.validation.ReviewValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,6 +26,8 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     private final DefaultModelMapper mapper;
+
+    private final ReviewValidator reviewValidator;
 
     private final ErrorsUtil errorsUtil;
 
@@ -62,13 +66,31 @@ public class ReviewController {
     @PostMapping("/reviews")
     public ResponseEntity<ReviewFullInfoResponse> createReview(@RequestBody @Valid CreateReviewRequest request,
                                                                BindingResult bindingResult) {
+        Review review = mapper.convertToReview(request);
+        validateReview(review, bindingResult);
+
+        Review savedReview = reviewService.createReview(review, request.categoryId(), request.itemId());
+        return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(savedReview));
+    }
+
+    @PostMapping("/reviews-items")
+    public ResponseEntity<ReviewFullInfoResponse> createReviewWithItem(@RequestBody @Valid
+                                                                           CreateReviewRequestWithNewItem request,
+                                                                       BindingResult bindingResult) {
+        Review review = mapper.convertToReview(request);
+        validateReview(review, bindingResult);
+
+        Review savedReview = reviewService.createReviewAndNewItem(review, request.categoryId(), request.itemName());
+        return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(savedReview));
+
+    }
+
+    public void validateReview(Review review, BindingResult bindingResult) {
+        reviewValidator.validate(review, bindingResult);
+
         if (bindingResult.hasErrors()) {
             throw new CreateReviewException(HttpStatus.BAD_REQUEST,
                     errorsUtil.getFieldsErrors(bindingResult), "Некорректные данные отзыва");
         }
-
-        Review savedReview =
-                reviewService.createReview(mapper.convertToReview(request), request.categoryId());
-        return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(savedReview));
     }
 }

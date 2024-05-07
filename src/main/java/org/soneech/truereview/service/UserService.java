@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.soneech.truereview.exception.UserNotFoundException;
 import org.soneech.truereview.model.User;
 import org.soneech.truereview.repository.UserRepository;
+import org.soneech.truereview.security.UserCredentials;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,5 +56,14 @@ public class UserService {
         if (!userRepository.existsById(userId)) {
             throw new UserNotFoundException(userId);
         }
+    }
+
+    public User getAuthenticatedUserIfExists() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserCredentials userCredentials = (UserCredentials) authentication.getPrincipal();
+
+        verifyThatUserExists(userCredentials.getUser().getId());
+
+        return userCredentials.getUser();
     }
 }
