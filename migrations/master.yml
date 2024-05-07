@@ -21,6 +21,13 @@ databaseChangeLog:
             path: sql/create-category-table.sql
 
   - changeSet:
+      id: create-review-item-table
+      author: Soneech
+      changes:
+        - sqlFile:
+            path: sql/create-review-item-table.sql
+
+  - changeSet:
       id: create-review-table
       author: Soneech
       changes:

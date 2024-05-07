@@ -16,9 +16,10 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(name = "object_name")
-    private String objectName;
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "review_item_id", referencedColumnName = "id")
+    private ReviewItem reviewItem;
 
     @NotNull
     @Min(1)
