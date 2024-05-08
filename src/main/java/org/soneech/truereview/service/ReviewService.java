@@ -13,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -38,24 +37,31 @@ public class ReviewService {
         return reviewRepository.countByAuthor(user);
     }
 
-    public List<Review> getAllReviews() {
+    public List<Review> findAll() {
         return reviewRepository.findAll();
     }
 
-    public List<Review> getUserReviews(long userId) throws UserNotFoundException {
+    public List<Review> findUserReviews(long userId) throws UserNotFoundException {
         userService.verifyThatUserExists(userId);
         return reviewRepository.findUserReviews(userId);
     }
 
-    public Review getReviewById(long id) {
+    public Review findById(long id) {
         return reviewRepository.findById(id).orElseThrow(() -> new ReviewNotFoundException(id));
     }
 
-    public List<Review> getReviewsForCategory(long categoryId) {
+    public List<Review> findReviewsForCategory(long categoryId) {
         if (!categoryService.existsById(categoryId)) {
             throw new CategoryNotFoundException(categoryId);
         }
         return reviewRepository.findReviewsForCategory(categoryId);
+    }
+
+    public List<Review> findReviewsByItem(long itemId) {
+        if (!reviewItemService.existsById(itemId)) {
+            throw new ReviewItemNotFoundException(itemId);
+        }
+        return reviewRepository.findReviewsForItem(itemId);
     }
 
     @Transactional
@@ -91,7 +97,7 @@ public class ReviewService {
 
     @Transactional
     public void deleteUserReview(long reviewId) throws ReviewNotFoundException {
-        Review foundReview = getReviewById(reviewId);
+        Review foundReview = findById(reviewId);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserCredentials userCredentials = (UserCredentials) authentication.getPrincipal();

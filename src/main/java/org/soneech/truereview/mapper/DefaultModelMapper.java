@@ -6,10 +6,7 @@ import org.soneech.truereview.dto.request.CreateReviewRequest;
 import org.soneech.truereview.dto.request.CreateReviewRequestWithNewItem;
 import org.soneech.truereview.dto.request.RegistrationRequest;
 import org.soneech.truereview.dto.request.UpdateCategoryRequest;
-import org.soneech.truereview.dto.response.review.CategoryResponse;
-import org.soneech.truereview.dto.response.review.ReviewFullInfoResponse;
-import org.soneech.truereview.dto.response.review.ReviewItemResponse;
-import org.soneech.truereview.dto.response.review.ReviewShortResponse;
+import org.soneech.truereview.dto.response.review.*;
 import org.soneech.truereview.dto.response.role.RoleResponse;
 import org.soneech.truereview.dto.response.user.*;
 import org.soneech.truereview.model.*;
@@ -98,8 +95,16 @@ public class DefaultModelMapper {
         return modelMapper.map(reviewItem, ReviewItemResponse.class);
     }
 
+    public ReviewItemShortResponse convertToReviewItemShortResponse(ReviewItem reviewItem) {
+        return modelMapper.map(reviewItem, ReviewItemShortResponse.class);
+    }
+
     public List<ReviewItemResponse> convertToListWithReviewItemResponse(List<ReviewItem> reviewItems) {
         return reviewItems.stream().map(this::convertToReviewItemResponse).toList();
+    }
+
+    public List<ReviewItemShortResponse> convertToListWithReviewItemShortResponse(List<ReviewItem> reviewItems) {
+        return reviewItems.stream().map(this::convertToReviewItemShortResponse).toList();
     }
 
     public CategoryResponse convertToCategoryResponse(Category category) {

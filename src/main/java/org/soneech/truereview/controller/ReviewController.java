@@ -33,26 +33,33 @@ public class ReviewController {
 
     @GetMapping("/reviews")
     public ResponseEntity<List<ReviewShortResponse>> getAllReviews() {
-        return ResponseEntity.ok(mapper.convertToListWithReviewShortResponse(reviewService.getAllReviews()));
+        return ResponseEntity.ok(mapper.convertToListWithReviewShortResponse(reviewService.findAll()));
     }
 
     @GetMapping("/users/{userId}/reviews")
     public ResponseEntity<List<ReviewShortResponse>> getUserReviews(@PathVariable("userId") long userId)
             throws UserNotFoundException {
-        return ResponseEntity.ok(mapper.convertToListWithReviewShortResponse(reviewService.getUserReviews(userId)));
+        return ResponseEntity.ok(mapper.convertToListWithReviewShortResponse(reviewService.findUserReviews(userId)));
     }
 
     @GetMapping("/reviews/{id}")
     public ResponseEntity<ReviewFullInfoResponse> getUserReview(@PathVariable("id") long id)
                                                                     throws ReviewNotFoundException {
-        return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(reviewService.getReviewById(id)));
+        return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(reviewService.findById(id)));
     }
 
     @GetMapping("/categories/{id}/reviews")
     public ResponseEntity<List<ReviewShortResponse>> getReviewsForCategory(@PathVariable("id") long categoryId)
             throws CategoryNotFoundException {
         return ResponseEntity
-                .ok(mapper.convertToListWithReviewShortResponse(reviewService.getReviewsForCategory(categoryId)));
+                .ok(mapper.convertToListWithReviewShortResponse(reviewService.findReviewsForCategory(categoryId)));
+    }
+
+    @GetMapping("/items/{id}/reviews")
+    public ResponseEntity<List<ReviewShortResponse>> getReviewsForItem(@PathVariable("id") long itemId)
+            throws ReviewItemNotFoundException {
+        return ResponseEntity
+                .ok(mapper.convertToListWithReviewShortResponse(reviewService.findReviewsByItem(itemId)));
     }
 
     @DeleteMapping("/reviews/{id}")

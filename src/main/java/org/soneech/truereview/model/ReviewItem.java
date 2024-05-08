@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Entity
@@ -21,6 +20,12 @@ public class ReviewItem {
 
     @OneToMany(mappedBy = "reviewItem")
     private List<Review> reviews;
+
+    @Transient
+    private int reviewsCount;
+
+    @Transient
+    private float middleRating;
 
     public ReviewItem(String name) {
         this.name = name;
