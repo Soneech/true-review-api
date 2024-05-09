@@ -108,5 +108,9 @@ public class ReviewService {
         } else {
             throw new BadRequestException("Обычный пользователь не может удалять чужие отзывы");
         }
+
+        if (!reviewItemService.checkThanItemHasReviews(foundReview.getReviewItem().getId())) {
+            reviewItemService.deleteReviewItem(foundReview.getReviewItem().getId());
+        }
     }
 }

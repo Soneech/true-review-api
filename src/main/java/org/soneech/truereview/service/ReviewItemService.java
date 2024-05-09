@@ -62,4 +62,15 @@ public class ReviewItemService {
     public List<ReviewItem> searchReviewsByNameSubstr(String nameSubstr) {
         return reviewItemRepository.searchReviewItemByNameSubstr(nameSubstr.replaceAll("\\s+", "").toLowerCase());
     }
+
+    public boolean checkThanItemHasReviews(long itemId) {
+        return reviewItemRepository.checkThatItemHasReviews(itemId);
+    }
+
+    public void deleteReviewItem(long itemId) {
+        if (!existsById(itemId)) {
+            throw new ReviewItemNotFoundException(itemId);
+        }
+        reviewItemRepository.deleteById(itemId);
+    }
 }

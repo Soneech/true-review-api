@@ -22,5 +22,8 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
             "ON ri.id = r.review_item_id WHERE r.category_id = :categoryId")
     List<ReviewItem> findAllForCategory(long categoryId);
 
+    @Query(nativeQuery = true, value = "SELECT EXISTS (SELECT r.id FROM review r WHERE r.review_item_id = :itemId)")
+    boolean checkThatItemHasReviews(long itemId);
+
     Optional<ReviewItem> findByName(String name);
 }
