@@ -23,7 +23,7 @@ public class ReviewValidator implements Validator {
         if ((review.getAdvantages() == null || review.getAdvantages().isBlank()) &&
                 (review.getDisadvantages() == null || review.getDisadvantages().isBlank()) &&
                 (review.getNote() == null || review.getNote().isBlank())) {
-            errors.rejectValue("textFields", HttpStatus.BAD_REQUEST.name(),
+            errors.rejectValue("note", HttpStatus.BAD_REQUEST.name(),
                     "Хотя бы одно поле должно быть заполнено");
         }
     }

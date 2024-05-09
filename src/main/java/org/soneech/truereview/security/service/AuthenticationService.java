@@ -9,6 +9,9 @@ import org.soneech.truereview.model.User;
 import org.soneech.truereview.security.util.JwtUtil;
 import org.soneech.truereview.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.Optional;
@@ -23,9 +26,22 @@ public class AuthenticationService {
 
     private final DefaultModelMapper mapper;
 
+    private final AuthenticationManager authenticationManager;
+
     public AuthenticatedUserResponse authenticate(AuthenticationRequest request) {
         Optional<User> user = userService.findByEmail(request.email());
         if (user.isEmpty()) {
+            throw new AuthException(HttpStatus.BAD_REQUEST, Collections.emptyMap(), "Неверный логин или пароль");
+        }
+
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(
+                        request.email(),
+                        request.password()
+                );
+        try {
+            authenticationManager.authenticate(authToken);
+        } catch (AuthenticationException exception) {
             throw new AuthException(HttpStatus.BAD_REQUEST, Collections.emptyMap(), "Неверный логин или пароль");
         }
 

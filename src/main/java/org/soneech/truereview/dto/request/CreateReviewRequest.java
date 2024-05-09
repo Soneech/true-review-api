@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 
 public record CreateReviewRequest(
 
-    @NotNull(message = "Не может быть пустым")
+    @NotNull(message = "Нужно найти и выбрать предмет отзыва")
     @JsonProperty("item_id")
     Long itemId,
 

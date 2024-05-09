@@ -56,7 +56,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticatedUserResponse> login(@RequestBody @Valid AuthenticationRequest request,
-                                                           BindingResult bindingResult) throws AuthException {
+                                                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new AuthException(HttpStatus.BAD_REQUEST, errorsUtil.getFieldsErrors(bindingResult),
                     "Некорректные данные аутентификации");

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 
 public record CreateReviewRequestWithNewItem(
     @NotBlank(message = "Не может быть пустым")
+    @Size(min = 2, max = 200, message="Должно содержать от 2 до 200 символов")
     @JsonProperty("item_name")
     String itemName,
 

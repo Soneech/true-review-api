@@ -2,6 +2,7 @@ package org.soneech.truereview.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
@@ -16,6 +17,7 @@ public class ReviewItem {
     private Long id;
 
     @NotBlank
+    @Size(min = 2, max = 200)
     private String name;
 
     @OneToMany(mappedBy = "reviewItem")
