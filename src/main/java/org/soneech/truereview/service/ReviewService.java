@@ -50,28 +50,19 @@ public class ReviewService {
         return reviewRepository.findById(id).orElseThrow(() -> new ReviewNotFoundException(id));
     }
 
-    public List<Review> findReviewsForCategory(long categoryId) {
-        if (!categoryService.existsById(categoryId)) {
-            throw new CategoryNotFoundException(categoryId);
-        }
-        return reviewRepository.findReviewsForCategory(categoryId);
-    }
-
     public List<Review> findReviewsByItem(long itemId) {
         if (!reviewItemService.existsById(itemId)) {
             throw new ReviewItemNotFoundException(itemId);
         }
-        return reviewRepository.findReviewsForItem(itemId);
+        return reviewRepository.findReviewsByItem(itemId);
     }
 
     @Transactional
-    public Review createReview(Review review, long categoryId, long itemId) throws NotFoundException {
+    public Review createReview(Review review, long itemId) throws NotFoundException {
         User user = userService.getAuthenticatedUserIfExists();
-        Category foundCategory = categoryService.findById(categoryId);
         ReviewItem reviewItem = reviewItemService.findById(itemId);
 
         review.setAuthor(user);
-        review.setCategory(foundCategory);
         review.setReviewItem(reviewItem);
         return reviewRepository.save(review);
     }
@@ -79,18 +70,19 @@ public class ReviewService {
     @Transactional
     public Review createReviewAndNewItem(Review review, long categoryId, String itemName) throws NotFoundException {
         User user = userService.getAuthenticatedUserIfExists();
+
         Category foundCategory = categoryService.findById(categoryId);
+        Optional<ReviewItem> foundReviewItem = reviewItemService.findByName(itemName.trim());
 
-        review.setAuthor(user);
-        review.setCategory(foundCategory);
-
-        Optional<ReviewItem> reviewItem = reviewItemService.findByName(itemName.trim());
-        if (reviewItem.isEmpty()) {
-            ReviewItem savedItem = reviewItemService.saveItem(new ReviewItem(itemName.trim()));
+        if (foundReviewItem.isEmpty()) {
+            ReviewItem reviewItem = new ReviewItem(itemName.trim(), foundCategory);
+            ReviewItem savedItem = reviewItemService.saveItem(reviewItem);
             review.setReviewItem(savedItem);
         } else {
-            review.setReviewItem(reviewItem.get());
+            review.setReviewItem(foundReviewItem.get());
         }
+
+        review.setAuthor(user);
 
         return reviewRepository.save(review);
     }

@@ -43,16 +43,9 @@ public class ReviewController {
     }
 
     @GetMapping("/reviews/{id}")
-    public ResponseEntity<ReviewFullInfoResponse> getUserReview(@PathVariable("id") long id)
+    public ResponseEntity<ReviewFullInfoResponse> getReview(@PathVariable("id") long id)
                                                                     throws ReviewNotFoundException {
         return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(reviewService.findById(id)));
-    }
-
-    @GetMapping("/categories/{id}/reviews")
-    public ResponseEntity<List<ReviewShortResponse>> getReviewsForCategory(@PathVariable("id") long categoryId)
-            throws CategoryNotFoundException {
-        return ResponseEntity
-                .ok(mapper.convertToListWithReviewShortResponse(reviewService.findReviewsForCategory(categoryId)));
     }
 
     @GetMapping("/items/{id}/reviews")
@@ -76,7 +69,7 @@ public class ReviewController {
         Review review = mapper.convertToReview(request);
         validateReview(review, bindingResult);
 
-        Review savedReview = reviewService.createReview(review, request.categoryId(), request.itemId());
+        Review savedReview = reviewService.createReview(review, request.itemId());
         return ResponseEntity.ok(mapper.convertToReviewFullInfoResponse(savedReview));
     }
 

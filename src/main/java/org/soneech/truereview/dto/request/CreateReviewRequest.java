@@ -21,10 +21,6 @@ public record CreateReviewRequest(
     String disadvantages,
 
     @Size(max = 1000, message = "Должно содержать не более 1000 символов")
-    String note,
-
-    @NotNull(message = "Не может быть пустым")
-    @JsonProperty("category_id")
-    Long categoryId
+    String note
 ) {
 }

@@ -18,9 +18,8 @@ public interface ReviewItemRepository extends JpaRepository<ReviewItem, Long> {
     @Query(nativeQuery = true, value = "SELECT AVG(r.rating) FROM review r WHERE r.review_item_id = :itemId")
     float getMiddleRating(long itemId);
 
-    @Query(nativeQuery = true, value = "SELECT ri.id, ri.name FROM review_item ri JOIN review r " +
-            "ON ri.id = r.review_item_id WHERE r.category_id = :categoryId")
-    List<ReviewItem> findAllForCategory(long categoryId);
+    @Query(nativeQuery = true, value = "SELECT * FROM review_item ri WHERE ri.category_id = :categoryId")
+    List<ReviewItem> findAllByCategory(long categoryId);
 
     @Query(nativeQuery = true, value = "SELECT EXISTS (SELECT r.id FROM review r WHERE r.review_item_id = :itemId)")
     boolean checkThatItemHasReviews(long itemId);

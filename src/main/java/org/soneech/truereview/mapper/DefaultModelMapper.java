@@ -92,11 +92,17 @@ public class DefaultModelMapper {
     }
 
     public ReviewItemResponse convertToReviewItemResponse(ReviewItem reviewItem) {
-        return modelMapper.map(reviewItem, ReviewItemResponse.class);
+        ReviewItemResponse reviewItemResponse = modelMapper.map(reviewItem, ReviewItemResponse.class);
+        reviewItemResponse.setCategory(convertToCategoryResponse(reviewItem.getCategory()));
+
+        return reviewItemResponse;
     }
 
     public ReviewItemShortResponse convertToReviewItemShortResponse(ReviewItem reviewItem) {
-        return modelMapper.map(reviewItem, ReviewItemShortResponse.class);
+        ReviewItemShortResponse reviewItemResponse = modelMapper.map(reviewItem, ReviewItemShortResponse.class);
+        reviewItemResponse.setCategory(convertToCategoryResponse(reviewItem.getCategory()));
+
+        return reviewItemResponse;
     }
 
     public List<ReviewItemResponse> convertToListWithReviewItemResponse(List<ReviewItem> reviewItems) {
@@ -117,7 +123,7 @@ public class DefaultModelMapper {
 
     public ReviewFullInfoResponse convertToReviewFullInfoResponse(Review review) {
         ReviewFullInfoResponse reviewResponse = modelMapper.map(review, ReviewFullInfoResponse.class);
-        reviewResponse.setCategory(convertToCategoryResponse(review.getCategory()));
+
         reviewResponse.setAuthor(convertToUserShortInfoResponse(review.getAuthor()));
         reviewResponse.setReviewItem(convertToReviewItemResponse(review.getReviewItem()));
 

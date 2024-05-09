@@ -13,6 +13,9 @@ public class ReviewItemResponse {
     @NotBlank
     private String name;
 
+    @NotNull
+    private CategoryResponse category;
+
     @JsonProperty("reviews_count")
     private Integer reviewsCount;
 

@@ -27,7 +27,7 @@ public class ReviewItemService {
             throw new CategoryNotFoundException(categoryId);
         }
 
-        List<ReviewItem> reviewItems = reviewItemRepository.findAllForCategory(categoryId);
+        List<ReviewItem> reviewItems = reviewItemRepository.findAllByCategory(categoryId);
         return reviewItems.stream().map(this::fillWithData).toList();
     }
 

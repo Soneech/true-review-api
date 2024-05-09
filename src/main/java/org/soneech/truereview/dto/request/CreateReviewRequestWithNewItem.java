@@ -10,6 +10,10 @@ public record CreateReviewRequestWithNewItem(
     String itemName,
 
     @NotNull(message = "Не может быть пустым")
+    @JsonProperty("category_id")
+    Long categoryId,
+
+    @NotNull(message = "Не может быть пустым")
     @Min(value = 1, message = "Значение должно находиться в диапазоне от 1 до 5")
     @Max(value = 5, message = "Значение должно находиться в диапазоне от 1 до 5")
     Short rating,
@@ -21,10 +25,6 @@ public record CreateReviewRequestWithNewItem(
     String disadvantages,
 
     @Size(max = 1000, message = "Должно содержать не более 1000 символов")
-    String note,
-
-    @NotNull(message = "Не может быть пустым")
-    @JsonProperty("category_id")
-    Long categoryId
+    String note
 ) {
 }

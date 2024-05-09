@@ -11,4 +11,7 @@ public class ReviewItemShortResponse {
 
     @NotBlank
     private String name;
+
+    @NotNull
+    private CategoryResponse category;
 }

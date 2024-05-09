@@ -3,10 +3,7 @@ package org.soneech.truereview.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
-import java.util.List;
 
 @Entity
 @Table
@@ -15,6 +12,10 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User author;
 
     @NotNull
     @ManyToOne
@@ -34,17 +35,4 @@ public class Review {
 
     @Size(max = 1000)
     private String note;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User author;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
-
-    @OneToMany(mappedBy = "review")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private List<Image> images;
 }

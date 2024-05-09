@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.soneech.truereview.dto.response.user.UserShortInfoResponse;
-import org.soneech.truereview.model.Image;
-import java.util.List;
 
 @Data
 public class ReviewFullInfoResponse {
 
     @NotNull
     private Long id;
+
+    @NotNull
+    private UserShortInfoResponse author;
 
     @NotNull
     @JsonProperty("review_item")
@@ -25,12 +26,4 @@ public class ReviewFullInfoResponse {
     private String disadvantages;
 
     private String note;
-
-    @NotNull
-    private CategoryResponse category;
-
-    private List<Image> images;
-
-    @NotNull
-    private UserShortInfoResponse author;
 }

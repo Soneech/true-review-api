@@ -13,6 +13,9 @@ public class ReviewShortResponse {
     private Long id;
 
     @NotNull
+    private UserShortInfoResponse author;
+
+    @NotNull
     @JsonProperty("review_item")
     private ReviewItemResponse reviewItem;
 
@@ -21,7 +24,4 @@ public class ReviewShortResponse {
 
     @NotBlank
     private String description;
-
-    @NotNull
-    private UserShortInfoResponse author;
 }
